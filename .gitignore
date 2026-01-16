@@ -1,0 +1,23 @@
+# Source documents and temp files
+_app context/
+.claude/
+
+# Symfony
+/var/
+/vendor/
+/.env.local
+/.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.zip
+*.tmp
+~$*
