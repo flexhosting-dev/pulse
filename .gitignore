@@ -1,23 +1,27 @@
-# Source documents and temp files
+###> project ###
 _app context/
 .claude/
+docx_extract/
+###< project ###
 
-# Symfony
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
 /var/
 /vendor/
-/.env.local
-/.env.*.local
+###< symfony/framework-bundle ###
 
-# IDE
-.idea/
-.vscode/
-*.sublime-*
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Temp files
-*.zip
-*.tmp
-~$*
+###> local ###
+server.log
+server.err
+###< local ###

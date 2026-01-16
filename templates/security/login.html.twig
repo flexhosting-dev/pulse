@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Pulse - Performance Management System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%237c3aed%22/><circle cx=%2250%22 cy=%2250%22 r=%2220%22 fill=%22%23a78bfa%22/><circle cx=%2250%22 cy=%2250%22 r=%228%22 fill=%22white%22/></svg>">
+
+    {# Prevent flash of wrong theme #}
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('pulse-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
+
+    {{ encore_entry_link_tags('app') }}
+
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .login-left {
+            flex: 1;
+            background: var(--pulse-gradient-sidebar);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.3) 0%, transparent 70%);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        .login-left::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
+            animation: pulse-glow 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .login-left-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            max-width: 400px;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .login-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .login-features {
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .login-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .login-feature i {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .login-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            background: var(--pulse-bg-body);
+        }
+
+        .login-form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-form-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--pulse-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form-header p {
+            color: var(--pulse-text-secondary);
+        }
+
+        .login-card {
+            background: var(--pulse-bg-surface);
+            border: 1px solid var(--pulse-border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--pulse-shadow-lg);
+        }
+
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+
+        .form-floating .form-control {
+            background: var(--pulse-bg-surface);
+            border: 1px solid var(--pulse-border-color);
+            border-radius: 0.5rem;
+            height: calc(3.5rem + 2px);
+            padding: 1rem 0.75rem;
+        }
+
+        .form-floating .form-control:focus {
+            border-color: var(--pulse-primary-light);
+            box-shadow: 0 0 0 0.2rem var(--pulse-primary-bg);
+        }
+
+        .form-floating label {
+            padding: 1rem 0.75rem;
+            color: var(--pulse-text-muted);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--pulse-gradient-primary);
+            border: none;
+            padding: 0.875rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+            color: white;
+        }
+
+        .login-extras {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--pulse-primary);
+            border-color: var(--pulse-primary);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--pulse-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .theme-toggle-login {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--pulse-bg-surface);
+            border: 1px solid var(--pulse-border-color);
+            width: 44px;
+            height: 44px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--pulse-text-primary);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .theme-toggle-login:hover {
+            background: var(--pulse-primary-bg);
+            color: var(--pulse-primary);
+        }
+
+        .theme-toggle-login .icon-light { display: none; }
+        .theme-toggle-login .icon-dark { display: block; }
+
+        [data-bs-theme="dark"] .theme-toggle-login .icon-light { display: block; }
+        [data-bs-theme="dark"] .theme-toggle-login .icon-dark { display: none; }
+
+        @media (max-width: 991.98px) {
+            .login-left {
+                display: none;
+            }
+
+            .login-right {
+                padding: 1.5rem;
+            }
+
+            .login-form-container {
+                max-width: 100%;
+            }
+
+            .mobile-logo {
+                display: block;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .mobile-logo .login-logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .mobile-logo h1 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--pulse-primary);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .mobile-logo {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page" data-controller="theme">
+        {# Left Side - Branding #}
+        <div class="login-left">
+            <div class="login-left-content">
+                <div class="login-logo">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <h1 class="login-title">Pulse</h1>
+                <p class="login-subtitle">
+                    Modern Performance Management System for tracking goals, reviews, and growth.
+                </p>
+
+                <div class="login-features">
+                    <div class="login-feature">
+                        <i class="bi bi-bullseye"></i>
+                        <span>SMART Goal Setting & Tracking</span>
+                    </div>
+                    <div class="login-feature">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Continuous Performance Monitoring</span>
+                    </div>
+                    <div class="login-feature">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>360-Degree Feedback Surveys</span>
+                    </div>
+                    <div class="login-feature">
+                        <i class="bi bi-award"></i>
+                        <span>Career Development Planning</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Right Side - Login Form #}
+        <div class="login-right">
+            <button class="theme-toggle-login" data-action="click->theme#toggle" aria-label="Toggle Theme">
+                <i class="bi bi-sun-fill icon-light"></i>
+                <i class="bi bi-moon-fill icon-dark"></i>
+            </button>
+
+            <div class="login-form-container">
+                {# Mobile Logo #}
+                <div class="mobile-logo">
+                    <div class="login-logo">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <h1>Pulse</h1>
+                </div>
+
+                <div class="login-form-header">
+                    <h2>Welcome back</h2>
+                    <p>Sign in to continue to Pulse</p>
+                </div>
+
+                <div class="login-card">
+                    {% if error %}
+                        <div class="alert alert-danger mb-3">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        <div class="form-floating">
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   name="_username"
+                                   value="{{ last_username }}"
+                                   placeholder="name@example.com"
+                                   required
+                                   autofocus>
+                            <label for="email">
+                                <i class="bi bi-envelope me-2"></i>Email address
+                            </label>
+                        </div>
+
+                        <div class="form-floating">
+                            <input type="password"
+                                   class="form-control"
+                                   id="password"
+                                   name="_password"
+                                   placeholder="Password"
+                                   required>
+                            <label for="password">
+                                <i class="bi bi-lock me-2"></i>Password
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="login-extras">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="remember_me"
+                                       name="_remember_me">
+                                <label class="form-check-label" for="remember_me">
+                                    Remember me
+                                </label>
+                            </div>
+                            <a href="#" class="text-primary small">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <div class="login-footer">
+                    <p>&copy; {{ "now"|date("Y") }} Pulse. Honeyguide Foundation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ encore_entry_script_tags('app') }}
+</body>
+</html>

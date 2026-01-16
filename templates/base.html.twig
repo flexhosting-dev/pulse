@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pulse{% endblock %} | Performance Management System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%237c3aed%22/><circle cx=%2250%22 cy=%2250%22 r=%2220%22 fill=%22%23a78bfa%22/><circle cx=%2250%22 cy=%2250%22 r=%228%22 fill=%22white%22/></svg>">
+
+    {# Prevent flash of wrong theme #}
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('pulse-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block body %}
+        <div class="app-wrapper" data-controller="sidebar">
+            {# Sidebar Overlay (Mobile) #}
+            <div class="sidebar-overlay" data-sidebar-target="overlay" data-action="click->sidebar#close"></div>
+
+            {# Sidebar Navigation #}
+            <aside class="sidebar" data-sidebar-target="sidebar">
+                <div class="sidebar-header">
+                    <a href="{{ path('app_dashboard') }}" class="sidebar-brand">
+                        <span class="brand-icon">
+                            <i class="bi bi-activity"></i>
+                        </span>
+                        <span class="brand-text">Pulse</span>
+                    </a>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-section">Main</div>
+
+                    <a href="{{ path('app_dashboard') }}" class="nav-link {{ app.request.attributes.get('_route') starts with 'app_dashboard' ? 'active' : '' }}">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-link-text">Dashboard</span>
+                    </a>
+
+                    <div class="nav-section">Performance</div>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-bullseye"></i>
+                        <span class="nav-link-text">My KPIs</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-list-check"></i>
+                        <span class="nav-link-text">All KPIs</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-calendar-check"></i>
+                        <span class="nav-link-text">Mid-Year Review</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span class="nav-link-text">Annual Review</span>
+                    </a>
+
+                    <div class="nav-section">Feedback</div>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-link-text">360 Survey</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-chat-dots"></i>
+                        <span class="nav-link-text">Check-ins</span>
+                    </a>
+
+                    <div class="nav-section">Improvement</div>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <span class="nav-link-text">PIPs</span>
+                        <span class="nav-badge">2</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-journal-text"></i>
+                        <span class="nav-link-text">Counselling</span>
+                    </a>
+
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') %}
+                    <div class="nav-section">Administration</div>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span class="nav-link-text">Users</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-building"></i>
+                        <span class="nav-link-text">Departments</span>
+                    </a>
+
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i>
+                        <span class="nav-link-text">Settings</span>
+                    </a>
+                    {% endif %}
+                </nav>
+
+                <div class="sidebar-footer">
+                    <small class="text-white-50">Pulse v1.0.0</small>
+                </div>
+            </aside>
+
+            {# Main Content #}
+            <div class="app-content">
+                {# Top Header #}
+                <header class="app-header" data-controller="theme">
+                    <div class="header-left">
+                        <button class="menu-toggle" data-action="click->sidebar#toggle" aria-label="Toggle Menu">
+                            <i class="bi bi-list"></i>
+                        </button>
+
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                {% block breadcrumb %}
+                                    <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">Home</a></li>
+                                {% endblock %}
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="header-right">
+                        {# Theme Toggle #}
+                        <button class="theme-toggle" data-action="click->theme#toggle" aria-label="Toggle Theme">
+                            <i class="bi bi-sun-fill icon-light"></i>
+                            <i class="bi bi-moon-fill icon-dark"></i>
+                        </button>
+
+                        {# Notifications #}
+                        <div class="notifications-dropdown dropdown">
+                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell"></i>
+                                <span class="notification-badge">3</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <div class="dropdown-header">
+                                    <span>Notifications</span>
+                                    <a href="#" class="text-primary small">Mark all read</a>
+                                </div>
+                                <div class="notification-list">
+                                    <a href="#" class="notification-item unread">
+                                        <div class="notification-icon bg-primary-subtle text-primary">
+                                            <i class="bi bi-check-circle"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-text">Your KPIs have been approved</div>
+                                            <div class="notification-time">2 hours ago</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="notification-item unread">
+                                        <div class="notification-icon bg-warning-subtle text-warning">
+                                            <i class="bi bi-clock"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-text">Mid-year review deadline approaching</div>
+                                            <div class="notification-time">5 hours ago</div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="notification-item">
+                                        <div class="notification-icon bg-info-subtle text-info">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-text">John Doe submitted their KPIs</div>
+                                            <div class="notification-time">Yesterday</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="dropdown-footer">
+                                    <a href="#">View all notifications</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# User Dropdown #}
+                        <div class="user-dropdown dropdown">
+                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="user-avatar">
+                                    {% if app.user %}
+                                        {{ app.user.firstName|slice(0,1)|upper }}{{ app.user.lastName|slice(0,1)|upper }}
+                                    {% else %}
+                                        GU
+                                    {% endif %}
+                                </div>
+                                <div class="user-info d-none d-sm-block">
+                                    <div class="user-name">
+                                        {% if app.user %}
+                                            {{ app.user.firstName }} {{ app.user.lastName }}
+                                        {% else %}
+                                            Guest User
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-role">
+                                        {% if app.user %}
+                                            {{ app.user.position ?? 'Staff' }}
+                                        {% else %}
+                                            Not logged in
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-person"></i> My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                {% if app.user %}
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_login') }}">
+                                        <i class="bi bi-box-arrow-in-right"></i> Login
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+
+                {# Flash Messages #}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show m-3 mb-0" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {# Page Content #}
+                <main class="app-main">
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
+</html>

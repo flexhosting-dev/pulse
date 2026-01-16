@@ -1,0 +1,119 @@
+// Pulse - Theme System
+// CSS Custom Properties for Light/Dark modes
+
+:root,
+[data-bs-theme="light"] {
+  // Background colors
+  --pulse-bg-body: #f8fafc;
+  --pulse-bg-surface: #ffffff;
+  --pulse-bg-surface-hover: #f1f5f9;
+  --pulse-bg-elevated: #ffffff;
+  --pulse-bg-sidebar: #1e1b4b;
+
+  // Text colors
+  --pulse-text-primary: #1e293b;
+  --pulse-text-secondary: #64748b;
+  --pulse-text-muted: #94a3b8;
+  --pulse-text-inverse: #ffffff;
+
+  // Border colors
+  --pulse-border-color: #e2e8f0;
+  --pulse-border-light: #f1f5f9;
+
+  // Primary colors
+  --pulse-primary: #7c3aed;
+  --pulse-primary-light: #a78bfa;
+  --pulse-primary-dark: #5b21b6;
+  --pulse-primary-bg: rgba(124, 58, 237, 0.1);
+
+  // Accent colors
+  --pulse-accent: #c084fc;
+  --pulse-accent-bg: rgba(192, 132, 252, 0.1);
+
+  // Status colors
+  --pulse-success: #10b981;
+  --pulse-success-bg: rgba(16, 185, 129, 0.1);
+  --pulse-warning: #f59e0b;
+  --pulse-warning-bg: rgba(245, 158, 11, 0.1);
+  --pulse-danger: #ef4444;
+  --pulse-danger-bg: rgba(239, 68, 68, 0.1);
+  --pulse-info: #06b6d4;
+  --pulse-info-bg: rgba(6, 182, 212, 0.1);
+
+  // Shadow
+  --pulse-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --pulse-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --pulse-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --pulse-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  // Gradients
+  --pulse-gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+  --pulse-gradient-sidebar: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
+
+  // Glass effect
+  --pulse-glass-bg: rgba(255, 255, 255, 0.8);
+  --pulse-glass-border: rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme="dark"] {
+  // Background colors
+  --pulse-bg-body: #0f172a;
+  --pulse-bg-surface: #1e293b;
+  --pulse-bg-surface-hover: #334155;
+  --pulse-bg-elevated: #1e293b;
+  --pulse-bg-sidebar: #0c0a1d;
+
+  // Text colors
+  --pulse-text-primary: #f1f5f9;
+  --pulse-text-secondary: #94a3b8;
+  --pulse-text-muted: #64748b;
+  --pulse-text-inverse: #1e293b;
+
+  // Border colors
+  --pulse-border-color: #334155;
+  --pulse-border-light: #1e293b;
+
+  // Primary colors (slightly brighter for dark mode)
+  --pulse-primary: #8b5cf6;
+  --pulse-primary-light: #a78bfa;
+  --pulse-primary-dark: #6d28d9;
+  --pulse-primary-bg: rgba(139, 92, 246, 0.15);
+
+  // Accent colors
+  --pulse-accent: #c084fc;
+  --pulse-accent-bg: rgba(192, 132, 252, 0.15);
+
+  // Status colors
+  --pulse-success: #34d399;
+  --pulse-success-bg: rgba(52, 211, 153, 0.15);
+  --pulse-warning: #fbbf24;
+  --pulse-warning-bg: rgba(251, 191, 36, 0.15);
+  --pulse-danger: #f87171;
+  --pulse-danger-bg: rgba(248, 113, 113, 0.15);
+  --pulse-info: #22d3ee;
+  --pulse-info-bg: rgba(34, 211, 238, 0.15);
+
+  // Shadow (more subtle in dark mode)
+  --pulse-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --pulse-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --pulse-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --pulse-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+  // Gradients
+  --pulse-gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%);
+  --pulse-gradient-sidebar: linear-gradient(180deg, #0c0a1d 0%, #1e1b4b 100%);
+
+  // Glass effect
+  --pulse-glass-bg: rgba(30, 41, 59, 0.8);
+  --pulse-glass-border: rgba(51, 65, 85, 0.5);
+
+  // Override Bootstrap dark mode colors
+  --bs-body-bg: var(--pulse-bg-body);
+  --bs-body-color: var(--pulse-text-primary);
+  --bs-border-color: var(--pulse-border-color);
+}
+
+// Transition for theme switch
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

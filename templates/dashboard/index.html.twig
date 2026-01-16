@@ -1,0 +1,308 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">Dashboard</li>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    {# Welcome Header #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Welcome back{% if app.user %}, {{ app.user.firstName }}{% endif %}!</h1>
+            <p class="text-muted mb-0">Here's what's happening with your organization today.</p>
+        </div>
+        <div class="d-none d-md-block">
+            <button class="btn btn-pulse">
+                <i class="bi bi-plus-lg me-2"></i>Create KPI
+            </button>
+        </div>
+    </div>
+
+    {# Stats Cards #}
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card stat-primary">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="stat-value">{{ stats.totalStaff }}</div>
+                    <div class="stat-label">Total Staff</div>
+                    <div class="stat-change positive">
+                        <i class="bi bi-arrow-up"></i> 3 this month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card stat-info">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="stat-value">{{ stats.maleStaff }}</div>
+                    <div class="stat-label">Male Staff</div>
+                    <div class="stat-change positive">
+                        <i class="bi bi-arrow-up"></i> 2 this month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card stat-success">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-person-heart"></i>
+                    </div>
+                    <div class="stat-value">{{ stats.femaleStaff }}</div>
+                    <div class="stat-label">Female Staff</div>
+                    <div class="stat-change positive">
+                        <i class="bi bi-arrow-up"></i> 1 this month
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card stat-warning">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="stat-value">{{ stats.pendingApprovals }}</div>
+                    <div class="stat-label">Pending Approvals</div>
+                    <div class="stat-change negative">
+                        <i class="bi bi-arrow-down"></i> 2 from yesterday
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {# Department Breakdown #}
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Department Breakdown</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">View Details</a></li>
+                            <li><a class="dropdown-item" href="#">Export</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for dept in departments %}
+                        <div class="col-sm-6 col-md-3">
+                            <div class="p-3 rounded-3 bg-{{ dept.color }}-subtle text-center">
+                                <div class="display-6 fw-bold text-{{ dept.color }}">{{ dept.count }}</div>
+                                <div class="small text-muted">{{ dept.name }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Department Chart Placeholder #}
+                    <div class="mt-4">
+                        <canvas id="departmentChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Recent Activity #}
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Activity</h5>
+                    <a href="#" class="small text-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for activity in recentActivities %}
+                        <div class="list-group-item d-flex align-items-start gap-3 py-3">
+                            <div class="activity-icon rounded-circle bg-{{ activity.color }}-subtle text-{{ activity.color }} d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="bi {{ activity.icon }}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1">{{ activity.message }}</p>
+                                <small class="text-muted">{{ activity.time }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Pending Approvals Table #}
+    <div class="row g-4 mt-0">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Pending Approvals</h5>
+                    <a href="#" class="btn btn-sm btn-outline-primary">
+                        View All <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for approval in pendingApprovals %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 0.75rem;">
+                                                {{ approval.employee|slice(0,2)|upper }}
+                                            </div>
+                                            <span>{{ approval.employee }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ approval.type }}</td>
+                                    <td>
+                                        <span class="badge badge-status {{ approval.statusClass }}">
+                                            {{ approval.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ approval.submitted }}</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary me-1" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-success me-1" title="Approve">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" title="Reject">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Quick Stats Row #}
+    <div class="row g-4 mt-0">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="display-4 fw-bold text-pulse mb-2">{{ stats.completedReviews }}</div>
+                    <div class="text-muted">Completed Reviews</div>
+                    <div class="progress mt-3" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"></div>
+                    </div>
+                    <small class="text-muted">85% of target</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="display-4 fw-bold text-success mb-2">{{ stats.activePIPs }}</div>
+                    <div class="text-muted">Active PIPs</div>
+                    <div class="progress mt-3" style="height: 6px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 4%"></div>
+                    </div>
+                    <small class="text-muted">4% of staff</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="display-4 fw-bold text-info mb-2">92%</div>
+                    <div class="text-muted">KPI Completion Rate</div>
+                    <div class="progress mt-3" style="height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 92%"></div>
+                    </div>
+                    <small class="text-muted">Ahead of schedule</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple department chart using Chart.js
+    document.addEventListener('turbo:load', function() {
+        const ctx = document.getElementById('departmentChart');
+        if (ctx && window.Chart) {
+            // Destroy existing chart if any
+            const existingChart = Chart.getChart(ctx);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for dept in departments %}'{{ dept.name }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+                    datasets: [{
+                        label: 'Staff Count',
+                        data: [{% for dept in departments %}{{ dept.count }}{% if not loop.last %}, {% endif %}{% endfor %}],
+                        backgroundColor: [
+                            'rgba(124, 58, 237, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(6, 182, 212, 0.8)',
+                            'rgba(245, 158, 11, 0.8)'
+                        ],
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
