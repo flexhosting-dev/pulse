@@ -1,0 +1,138 @@
+{{ form_start(form, {attr: {class: 'needs-validation', 'data-controller': 'weight-validator', novalidate: 'novalidate'}}) }}
+
+{% if form.employee is defined %}
+<div class="row mb-3">
+    <div class="col-12">
+        {{ form_row(form.employee) }}
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.year) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.title) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.startDate) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.endDate) }}
+    </div>
+</div>
+
+{# 4-Part Plan Sections #}
+<div class="accordion mb-4" id="planParts">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#part1">
+                Part 1: Performance Standards
+            </button>
+        </h2>
+        <div id="part1" class="accordion-collapse collapse show" data-bs-parent="#planParts">
+            <div class="accordion-body">
+                {{ form_row(form.performanceStandards) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#part2">
+                Part 2: Competencies
+            </button>
+        </h2>
+        <div id="part2" class="accordion-collapse collapse" data-bs-parent="#planParts">
+            <div class="accordion-body">
+                {{ form_row(form.competencies) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#part3">
+                Part 3: Training Goals
+            </button>
+        </h2>
+        <div id="part3" class="accordion-collapse collapse" data-bs-parent="#planParts">
+            <div class="accordion-body">
+                {{ form_row(form.trainingGoals) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#part4">
+                Part 4: Career Development
+            </button>
+        </h2>
+        <div id="part4" class="accordion-collapse collapse" data-bs-parent="#planParts">
+            <div class="accordion-body">
+                {{ form_row(form.careerDevelopment) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Objectives Section #}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-bullseye me-2"></i>Objectives
+        </h5>
+        <div>
+            <span class="badge" data-weight-validator-target="badge" id="weight-badge">
+                Total: <span data-weight-validator-target="total">0</span>%
+            </span>
+        </div>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-3">
+            <i class="bi bi-info-circle me-1"></i>
+            Define your performance objectives. The total weight of all objectives must equal 100%.
+        </p>
+
+        <div id="objectives-container"
+             data-controller="form-collection"
+             data-form-collection-prototype-value="{{ form_widget(form.objectives.vars.prototype)|e('html_attr') }}"
+             data-form-collection-index-value="{{ form.objectives|length }}"
+             data-form-collection-item-class-value="objective-item">
+
+            {% for objective in form.objectives %}
+                <div class="objective-item card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6 class="card-title mb-0">Objective {{ loop.index }}</h6>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-action="form-collection#remove">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        {{ form_widget(objective) }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-outline-primary" data-action="form-collection#add" data-form-collection-target="addButton">
+            <i class="bi bi-plus-lg me-1"></i> Add Objective
+        </button>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <a href="{{ path('app_goals_index') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Cancel
+    </a>
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save me-1"></i> Save Plan
+    </button>
+</div>
+
+{{ form_end(form) }}

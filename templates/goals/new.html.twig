@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Performance Plan{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('app_goals_index') }}">My Goals</a></li>
+    <li class="breadcrumb-item active">New Plan</li>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="h3 mb-1">Create Performance Plan</h1>
+    {% if targetEmployee is defined and targetEmployee %}
+        <p class="text-muted mb-0">Creating a performance plan for <strong>{{ targetEmployee.fullName }}</strong>.</p>
+    {% elseif isHrOrAdmin is defined and isHrOrAdmin %}
+        <p class="text-muted mb-0">Select an employee and define their performance objectives and goals for the year.</p>
+    {% else %}
+        <p class="text-muted mb-0">Define your performance objectives and goals for the year.</p>
+    {% endif %}
+</div>
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+<div class="card">
+    <div class="card-body">
+        {% include 'goals/_form.html.twig' %}
+    </div>
+</div>
+{% endblock %}
